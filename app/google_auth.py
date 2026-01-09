@@ -12,15 +12,8 @@ SCOPES = [
 
 def get_auth_flow():
     """Returns a Flow object configured from Streamlit secrets."""
-    # Detect environment: Cloud or Local
-    if os.getenv('STREAMLIT_SHARING_MODE'):
-         # In Streamlit Cloud, specific URL is required. 
-         # Best practice: User puts the production URL in secrets, or we construct it.
-         # For simplicity, let's ask user to put it in secrets or defaulting to a placeholder that needs changing.
-         # Actually, better: allow override via secrets, default to localhost for dev.
-         redirect_uri = st.secrets.get("redirect_url", "http://localhost:8501")
-    else:
-         redirect_uri = "http://localhost:8501"
+    # Prioritize 'redirect_url' from secrets (Cloud), fallback to localhost (Local)
+    redirect_uri = st.secrets.get("redirect_url", "http://localhost:8501")
 
     # Robust Secret Access
     if "client" not in st.secrets:
